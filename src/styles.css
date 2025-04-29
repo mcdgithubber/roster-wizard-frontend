@@ -1,1 +1,18 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+    --background: #1e1e2f;
+    --card-bg: #2a2a3b;
+    --primary: #6c5ce7;
+    --primary-light: #a29bfe;
+    --text-light: #ffffff;
+    --text-muted: #cccccc;
+    --border-radius: 8px;
+  }
+  
+
+  body {
+    background-color: #f9f9f9;
+  }
+
+  body h1 {
+    color: var(--text-muted);
+  }

@@ -1,0 +1,19 @@
+.intro-section {
+    max-width: 800px;
+    margin: 30px auto 20px;
+    padding: 0 20px;
+    color: var(--text-light);
+    text-align: center;
+  }
+  
+  .intro-section h2 {
+    margin-bottom: 10px;
+    color: var(--primary-light);
+  }
+  
+  .intro-section p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--card-bg);
+  }
+  

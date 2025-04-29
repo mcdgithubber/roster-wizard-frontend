@@ -1,0 +1,137 @@
+<div class="form-container">
+    <h2>Add Employee</h2>
+    
+    <div class="employee-name-row">
+      <input [(ngModel)]="employeeName" placeholder="Employee Name" />
+    
+      <span class="or-text">or</span>
+    
+      <select (change)="onSelectEmployee($any($event.target).value)">
+        <option value="" selected disabled>Select from list</option>
+        <option *ngFor="let name of availableEmployees" [value]="name">
+          {{ name }}
+        </option>
+      </select>
+    </div>
+  
+    <h3>Preferred Days</h3>
+    <div class="day-checkboxes">
+      <label *ngFor="let day of getDaysOfWeek()" class="day-label">
+        <input type="checkbox" [(ngModel)]="selectedDays[day]" />
+        {{ day }}
+      </label>
+    </div>
+
+  
+    <h3>Preferred Shift</h3>
+    <label>
+      <input type="radio" [(ngModel)]="preferredShift" [value]="0" /> 
+      AM
+    </label>
+    <label>
+      <input type="radio" [(ngModel)]="preferredShift" [value]="1" />
+      PM
+    </label>
+  
+    <button (click)="addEmployee()">Add Employee</button>
+  
+    <h2>Employee List</h2>
+    <ul>
+      <li *ngFor="let emp of employees; let i = index" class="employee-item">
+        {{ emp.name }} - {{ mapShift(emp.preferredShift) }} - ({{ emp.preferredWorkDays.join(', ') }})
+        <button (click)="removeEmployee(i)" class="delete-button">🗑️</button>
+      </li>
+    </ul>
+    
+  
+    <button (click)="generateRoster()" [disabled]="isLoading">Generate Roster</button>
+
+
+    <div #calendarPrintSection id="calendarPrint">
+      <div *ngIf="roster" class="calendar-view-container">
+        <h2>Week 1 - Calendar View</h2>
+        <table class="calendar-table">
+          <thead>
+            <tr>
+              <th>Shift / Day</th>
+              <th *ngFor="let day of getDaysOfWeek()">{{ day }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>AM</strong></td>
+              <td *ngFor="let day of getDaysOfWeek()">
+                <div *ngFor="let employee of findEmployeesForShift(day, 0, 1)">
+                  {{ "("+ employee + ")" }}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>PM</strong></td>
+              <td *ngFor="let day of getDaysOfWeek()">
+                <div *ngFor="let employee of findEmployeesForShift(day, 1, 1)">
+                  {{ "("+ employee + ")" }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      
+        <h2 style="margin-top: 40px;">Week 2 - Calendar View</h2>
+        <table class="calendar-table">
+          <thead>
+            <tr>
+              <th>Shift / Day</th>
+              <th *ngFor="let day of getDaysOfWeek()">{{ day }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>AM</strong></td>
+              <td *ngFor="let day of getDaysOfWeek()">
+                <div *ngFor="let employee of findEmployeesForShift(day, 0, 2)">
+                  {{ "("+ employee + ")" }}
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <td><strong>PM</strong></td>
+              <td *ngFor="let day of getDaysOfWeek()">
+                <div *ngFor="let employee of findEmployeesForShift(day, 1, 2)">
+                  {{ "("+ employee + ")" }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <button (click)="printCalendar()" class="print-button">
+      🖨️ Print Calendar
+    </button>
+
+  
+    <div *ngIf="roster" class="roster-table-container">
+      <h2>Generated Roster</h2>
+      <table class="roster-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Employee Name</th>
+            <th>Preferred Shift</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let entry of roster.entries">
+            <td>{{ entry.workDate | date: 'fullDate' }}</td>
+            <td>{{ entry.employee.name }}</td>
+            <td>{{ mapShift(entry.employee.preferredShift) }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    
+    
+    
+  </div>
+  
